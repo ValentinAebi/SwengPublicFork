@@ -12,6 +12,7 @@ import static org.hamcrest.Matchers.*;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.NoSuchFileException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,14 +65,21 @@ class AppTest {
 
     // Bug 1
     @Test
-    void testListHiddenFiles() {
-        // TODO: fill me!
+    void testListHiddenFiles() throws NoSuchPathException, DirectoryNotReadableException {
+        sh.changeDirectory("/d_b/d_d/d_e");
+        List<String> obt = sh.listWorkingDirectory();
+        assertThat(obt, containsInAnyOrder(
+                "d_e/",
+                "f_i.txt",
+                "f_j.txt"
+        ));
     }
 
     // Bug 2
     @Test
-    void testRemoveDirectoryNonEmpty() {
-        // TODO: fill me!
+    void testRemoveDirectoryNonEmpty() throws NoSuchPathException {
+        sh.changeDirectory("d_a/");
+        assertThrows(DirectoryNotEmptyException.class, () -> sh.remove("d_c"));
     }
 
     // Bug 3
